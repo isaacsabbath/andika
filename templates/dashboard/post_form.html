@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ mode }} Post — BlogFast{% endblock %}
+{% block content %}
+<section class="max-w-4xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-extrabold mb-6">{{ mode }} Post</h1>
+  <form method="post" enctype="multipart/form-data" class="space-y-6">
+    {% csrf_token %}
+    {{ form.media }}
+    <div>
+      <label for="id_title" class="block text-sm font-semibold mb-2">Title</label>
+      <input type="text" name="title" id="id_title" value="{{ form.title.value|default:'' }}" required class="w-full px-4 py-3 text-lg rounded-md bg-gray-800 border border-gray-700 focus:border-brand-yellow outline-none" placeholder="Enter your blog post title..." />
+    </div>
+    <div>
+      <label for="id_content" class="block text-sm font-semibold mb-2">Content</label>
+      {{ form.content }}
+    </div>
+    <div>
+      <label for="id_featured_image" class="block text-sm font-semibold mb-2">Featured Image (optional)</label>
+      <input type="file" name="featured_image" id="id_featured_image" class="w-full px-4 py-2 rounded-md bg-gray-800 border border-gray-700 focus:border-brand-yellow outline-none file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-brand-yellow file:text-black file:font-semibold hover:file:brightness-95" />
+    </div>
+    <div class="flex items-center gap-2">
+      <input type="checkbox" name="published" id="id_published" {% if form.published.value %}checked{% endif %} class="w-5 h-5 rounded bg-gray-800 border-gray-700 text-brand-yellow focus:ring-brand-yellow" />
+      <label for="id_published" class="text-sm font-semibold">Publish immediately</label>
+    </div>
+    <button type="submit" class="px-6 py-3 bg-brand-yellow text-black rounded-md font-bold text-lg hover:brightness-95 transition-all">Save Post</button>
+  </form>
+</section>
+{% endblock %}

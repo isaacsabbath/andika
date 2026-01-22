@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — BlogFast{% endblock %}
+{% block content %}
+<section class="max-w-4xl mx-auto px-4 py-8" x-data="{posts: [], refresh(){ fetch('{% url 'dashboard:stats_json' %}').then(r=>r.json()).then(d=>this.posts=d.posts) }, init(){ this.refresh(); setInterval(()=>this.refresh(), 5000) } }">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-extrabold">Dashboard</h1>
+    <a href="{% url 'dashboard:post_create' %}" class="px-4 py-2 bg-brand-yellow text-black rounded-md font-semibold hover:brightness-95 transition-all">New Post</a>
+  </div>
+
+  <div class="space-y-4">
+    {% for p in posts %}
+    <div class="bg-gray-900 rounded-lg p-4 flex items-center justify-between">
+      <div>
+        <h2 class="font-bold">{{ p.title }}</h2>
+        <p class="text-xs text-gray-400">Published: {{ p.published }}</p>
+        <p class="text-xs text-gray-400">Likes: {{ p.like_count }} • Comments: {{ p.comment_count }}</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="{% url 'dashboard:post_edit' p.id %}" class="px-3 py-1 rounded bg-gray-800 hover:bg-gray-700">Edit</a>
+        <form method="post" action="{% url 'dashboard:post_toggle' p.id %}">{% csrf_token %}<button class="px-3 py-1 rounded bg-gray-800 hover:bg-gray-700">Toggle Publish</button></form>
+        <form method="post" action="{% url 'dashboard:post_delete' p.id %}">{% csrf_token %}<button class="px-3 py-1 rounded bg-red-600 hover:bg-red-700">Delete</button></form>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-gray-400">No posts yet.</p>
+    {% endfor %}
+  </div>
+
+  <div class="mt-8">
+    <h3 class="text-sm text-gray-400">Live Stats</h3>
+    <div class="mt-2 space-y-2">
+      <template x-for="p in posts" :key="p.id">
+        <div class="flex items-center justify-between bg-gray-900 rounded p-3">
+          <div class="text-sm" x-text="p.title"></div>
+          <div class="text-xs text-gray-400">Likes: <span x-text="p.like_count"></span> • Comments: <span x-text="p.comment_count"></span></div>
+        </div>
+      </template>
+    </div>
+  </div>
+</section>
+{% endblock %}

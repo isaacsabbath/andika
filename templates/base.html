@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}I'm a Writer..{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                black: "#000000",
+                yellow: "#facc15", // Tailwind yellow-400
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+      @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+      .fade-in { animation: fadeIn 400ms ease-in-out both; }
+    </style>
+    {% block head %}{% endblock %}
+  </head>
+  <body class="bg-brand-black text-white min-h-screen">
+    <header class="fade-in">
+      <div class="max-w-3xl mx-auto px-4 py-6 flex items-center justify-between">
+        <a href="/" class="font-extrabold text-2xl tracking-tight">Sasa<span class="text-brand-yellow">andika</span></a>
+        <nav class="text-sm flex items-center gap-4">
+          <a href="/" class="hover:text-brand-yellow transition-colors">Home</a>
+          {% if request.user.is_staff %}
+          <a href="/dashboard/" class="hover:text-brand-yellow transition-colors">Dashboard</a>
+          <form method="post" action="/accounts/logout/" class="inline">
+            {% csrf_token %}
+            <button type="submit" class="hover:text-brand-yellow transition-colors">Logout</button>
+          </form>
+          {% endif %}
+        </nav>
+      </div>
+    </header>
+    <main class="fade-in">
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="border-t border-gray-800 mt-12">
+      <div class="max-w-3xl mx-auto px-4 py-8 text-xs text-gray-400">Read slowly. Think deeply.</div>
+    </footer>
+  </body>
+  </html>

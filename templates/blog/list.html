@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}BlogFast — Latest{% endblock %}
+{% block content %}
+<section class="max-w-3xl mx-auto px-4 py-8">
+  <div class="space-y-6">
+    {% for post in posts %}
+    <article class="bg-gray-900 rounded-xl overflow-hidden shadow hover:shadow-lg transition-shadow">
+      {% if post.featured_image %}
+      <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="w-full h-48 object-cover" />
+      {% endif %}
+      <div class="p-6">
+        <h2 class="text-xl font-bold mb-2">{{ post.title }}</h2>
+        <div class="prose prose-invert line-clamp-3 text-sm text-gray-300">
+          {{ post.content|safe }}
+        </div>
+        <div class="mt-4 flex items-center justify-between">
+          <a href="{% url 'blog:detail' post.pk %}" class="inline-flex items-center px-4 py-2 bg-brand-yellow text-black rounded-md font-semibold hover:brightness-95 transition-all">Read More</a>
+          <span class="text-xs text-gray-500">{{ post.created_at|date:"M d, Y" }}</span>
+        </div>
+      </div>
+    </article>
+    {% empty %}
+    <p class="text-gray-400">No posts yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
