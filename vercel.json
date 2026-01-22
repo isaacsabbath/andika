@@ -1,5 +1,5 @@
 {
-    "buil   ds": [
+    "builds": [
         {
             "src": "blogfast/wsgi.py",
             "use": "@vercel/python",
